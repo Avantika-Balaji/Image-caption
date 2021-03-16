@@ -1,5 +1,4 @@
 #!/bin/bash
-
 cd data
 if [ ! -f ResNet50.model ]; then
   wget https://www.dropbox.com/s/eqdmml7kj3545sv/ResNet50.model 
@@ -22,7 +21,7 @@ if [ "$1" == "train" ]; then
   if [ ! -f train2014_ResNet50_features.zip ]; then
     wget  https://www.dropbox.com/s/v3tewruak581uf3/train2014_ResNet50_features.zip
     unzip train2014_ResNet50_features.zip
-  fi 
+  fi
   if [ ! -f val2014_ResNet50_features.zip ]; then
     wget https://www.dropbox.com/s/qi3s55vzgmkiqkh/val2014_ResNet50_features.zip
     unzip val2014_ResNet50_features.zip

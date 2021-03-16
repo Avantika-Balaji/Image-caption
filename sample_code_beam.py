@@ -18,6 +18,9 @@ from chainer import cuda
 import chainer.functions as F
 from chainer import cuda, Function, FunctionSet, gradient_check, Variable, optimizers
 from chainer import serializers
+import matplotlib 
+from matplotlib import pyplot as plt
+import matplotlib.image as mpimg
 
 sys.path.append('./code')
 from CaptionGenerator import CaptionGenerator
@@ -26,7 +29,7 @@ from CaptionGenerator import CaptionGenerator
 parser = argparse.ArgumentParser()
 parser.add_argument("-g", "--gpu",default=-1, type=int, help=u"GPU ID.CPU is -1")
 parser.add_argument('--vocab',default='./data/MSCOCO/mscoco_caption_train2014_processed_dic.json', type=str,help='path to the vocaburary json')
-parser.add_argument('--img',default='./sample_imgs/dog.jpg', type=str,help='path to the image')
+parser.add_argument('--img',default='./sample_imgs', type=str,help='path to the image')
 parser.add_argument('--cnn-model', type=str, default='./data/ResNet50.model',help='place of the ResNet model')
 parser.add_argument('--rnn-model', type=str, default='./data/caption_model.model',help='place of the caption model')
 parser.add_argument('--beam',default=3, type=int,help='beam size in beam search')
@@ -44,7 +47,25 @@ caption_generator=CaptionGenerator(
     first_word= args.lang,
     )
 
-captions = caption_generator.generate(args.img)
-for caption in captions:
-    print (" ".join(caption["sentence"]))
-    print (caption["log_likelihood"])
+f = open("captions.txt", "w")
+
+captions_list=""
+for image_path in os.listdir(args.img):
+	input_path = os.path.join(args.img, image_path)
+	captions = caption_generator.generate(input_path)
+	# img = mpimg.imread(input_path)
+	# myimg=plt.imshow(img)
+	# plt.show()
+
+	#print(input_path)
+	
+	#print(captions)
+	for caption in captions:
+		temp1=(" ".join(caption["sentence"]))
+		temp2=(caption["log_likelihood"])
+	print(temp1)
+	#print(temp1[6:-6])
+	captions_list+=temp1[6:-6]+'\n'
+f.write(captions_list)
+f.close()
+
